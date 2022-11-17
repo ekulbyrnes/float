@@ -105,7 +105,9 @@ You should now get a simple `Hello, World!` message when you navigate to the url
 
 [Creating Models](https://docs.djangoproject.com/en/4.1/intro/tutorial02/#creating-models)
 
-## Initialise an app
+## Getting things going
+
+### Initialise an app
 
 1. Identify the container ID and attach a bash shell for the container:
 
@@ -121,7 +123,7 @@ python manage.py startapp <app_name>
 ```
 This will register a new app with Django, and create <app_name> folder for your app files.
 
-
+### Modify or make views
 
 6. Modify existing views or create brand new ones. You can do this by editing the commented files shown below:
 
@@ -146,7 +148,11 @@ django
 ```
 > If you don't have an existing view, you can create a simple HttpRequest view [using the Django tutorial](https://docs.djangoproject.com/en/4.1/intro/tutorial01/#write-your-first-view). Help is also available at this resource.
 
+You should now get a simple `Hello, World!` message when you navigate to the url you just created (usually `http://localhost:$APP_PORT/<app-name>`) if you followed the Django tutorial precisely.
 
+### Building a model, activating a model, and making migrations
+
+[Creating Models](https://docs.djangoproject.com/en/4.1/intro/tutorial02/#creating-models)
 
 ## Notes
 
