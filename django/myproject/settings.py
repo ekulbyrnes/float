@@ -57,7 +57,6 @@ INSTALLED_APPS = [
     # Include this to build on top of Boostrap 5
     'django_bootstrap5',
     'float',
-    'stream-django',
 ]
 
 MIDDLEWARE = [
@@ -166,6 +165,3 @@ EMAIL_TIMEOUT = env('EMAIL_TIMEOUT', default=None)
 EMAIL_SSL_KEYFILE = env('EMAIL_SSL_KEYFILE', default=None)
 EMAIL_SSL_CERTFILE = env('EMAIL_SSL_CERTFILE', default=None)
 DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', default='webmaster@localhost')
-
-STREAM_API_KEY = env(STREAM_API_KEY)
-STREAM_API_SECRET = env(STREAM_API_SECRET)
