@@ -46,6 +46,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # Add this to set up authentication for REST framework
     #path('api-auth/', include('rest_framework.urls')),
+
+    path('', include('float.urls')),
+    # This points the root URLconf at the <app>.urls module, and is the first of the non-admin urls
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
