@@ -165,3 +165,5 @@ By default there is no `docker-compose.yml`, so `docker compose up` won't work w
 `docker-compose.traefik.yml` is designed for production when using Traefik as a HTTP proxy
 
 For convenience, any of these files could be copied or symlinked to `docker-compose.yml` so you don't need to specify the file with `docker-compose -f file.yml`.
+
+***This app built using [JustDjango-BlogPost Tutorial](https://justdjango.com/blog/build-a-blog-with-django).***
