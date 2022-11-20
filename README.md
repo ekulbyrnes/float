@@ -78,3 +78,6 @@ By default there is no `docker-compose.yml`, so `docker compose up` won't work w
 `docker-compose.prod.yml` is designed for production.
 
 For convenience, either of these files could be copied to `docker-compose.yml` so you don't need to specify the file with `docker compose -f file.yml`.
+
+
+***This app built using [JustDjango-BlogPost Tutorial](https://justdjango.com/blog/build-a-blog-with-django).***
