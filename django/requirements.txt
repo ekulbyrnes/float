@@ -4,4 +4,3 @@ djangorestframework
 psycopg2-binary
 django-bootstrap5
 gunicorn
-stream-django
