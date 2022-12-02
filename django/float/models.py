@@ -14,7 +14,7 @@ class Role(models.Model):
         help_text='Role assigned for the event')
 
     def __str__(self):
-        return self.title
+        return self.title # returns the Role Title
 
 class Place(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -26,7 +26,7 @@ class Place(models.Model):
         help_text = 'Location assigned for the event.')
 
     def __str__(self):
-        return self.place
+        return self.place # returns the Place (assigned location)
 
 class Operator(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -44,7 +44,9 @@ class Operator(models.Model):
         help_text='Provide the order in which you wish to have this operator appear in the Message dropdown.')
 
     def __str__(self):
-        return f'{self.name} ({self.role}): {self.base}'
+        return f'{self.name} ({self.role}): {self.base}' # returns the Operator's name, role, and assigned location
+        # this helps reconcile the reported location of the Operator with their assigned location and the reported 
+        # location to assess if further support is required in the field.
 
 class Message(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -54,16 +56,16 @@ class Message(models.Model):
 
     message_entry_timestamp = models.DateTimeField(auto_now_add=False) # Records a timestamp for when the message was initially added.
     recipient = models.ForeignKey('Operator', null=True, blank=True, on_delete=models.SET_NULL, related_name='is_recipient',
-        help_text='Message was received from this Operator.')
+        help_text='Message was received by this Operator.')
     sender = models.ForeignKey('Operator', null=True, blank=True, on_delete=models.SET_NULL, related_name='is_sender',
         help_text='Message was sent by this Operator.')
     reported_location = models.CharField(max_length=256, null=True, blank=True,
-        help_text='Operator\'s reported location, if provided.')
+        help_text='Sender Operator\'s reported location, if provided - recipient location should be recorded if needed as message info.')
     message_info = models.TextField(null=True, blank=True,
         help_text='Message details.')
     
     def __str__(self):
-        return f'{self.id}: {self.sender} -> {self.recipient}'
+        return f'{self.id}: {self.sender} -> {self.recipient}' # returns the {Message ID}: {Message Sender} -> {Message Recipient}.
 
 class EmergencyPatient(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -83,7 +85,7 @@ class EmergencyPatient(models.Model):
         help_text='Obtain if required for follow up after incident has been controlled.')
 
     def __str__(self):
-        return f'{self.id}: {self.name[0]}'
+        return f'{self.id}: {self.name[0]}' # returns Patient ID: Patient's first initial - this preserves privacy on the dashboard.
 
 class EmergencyMessage(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -93,7 +95,7 @@ class EmergencyMessage(models.Model):
 
     emergency_message_entry_timestamp = models.DateTimeField(auto_now_add=False) # Creates fixed timestamp recording the message entry time.
     recipient = models.ForeignKey('Operator', null=True, blank=True, on_delete=models.SET_NULL, related_name='is_emergency_recipient',
-        help_text='Message was received from this Operator.')
+        help_text='Message was received by this Operator.')
     sender = models.ForeignKey('Operator', null=True, blank=True, on_delete=models.SET_NULL, related_name='is_emergency_sender',
         help_text='Message was sent by this Operator.')
     # end of message transmission detail fields
@@ -139,4 +141,10 @@ class EmergencyMessage(models.Model):
         help_text='Select if this incident has been resolved and no further action is required.')
 
     def __str__(self):
-        return f'{self.id}: {self.recipient} | {self.nature_of_injury} @ {self.location} - {self.patient_ref} | Resolved: {self.Has_this_been_resolved}'
+        return f'{self.id}: {self.sender} -> {self.recipient} @ {self.reported_location} ({self.patient_ref} | {self.nature_of_injury})'
+
+# class Incident(models.Model):
+#    id = models.BigAutoField(primary_key=True)
+#    history = HistoricalRecords()
+#    last_updated_timestamp = models.DateTimeField(auto_now=True) # Updates timestamp each time the object is save.
+#    # end of basic fields 
