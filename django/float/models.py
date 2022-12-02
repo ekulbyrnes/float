@@ -83,6 +83,8 @@ class IncidentPatient(models.Model):
         help_text='Phone is preferred - obtain if required for follow up after incident has been controlled.')
     contact_email = models.CharField(max_length = 256, null=True, blank=True,
         help_text='Obtain if required for follow up after incident has been controlled.')
+    incident_ref = models.ForeignKey('Incident', null=True, blank=True, on_delete=models.SET_NULL, related_name="is_incident_ref",
+        help_text='Create a new patient or select an existing patient to allocate a Patient ID (even if details of patient are not known at the time of the message)')
 
     def __str__(self):
         return f'{self.id}: {self.name[0]}' # returns Patient ID: Patient's first initial - this preserves privacy on the dashboard.
@@ -98,7 +100,7 @@ class Incident(models.Model):
         help_text='Time of the incident events occuring') # Creates editable timestamp recording the event time.
     reported_location = models.CharField(max_length=256, null=False, blank=True, 
         help_text='What is the reported location of the incident?')
-    patient_ref = models.ForeignKey('IncidentPatient', null=True, blank=True, on_delete=models.SET_NULL, related_name="is_patient_ref",
+    patient_ref = models.ForeignKey('IncidentPatient', null=True, blank=True, on_delete=models.SET_NULL, related_name="is_incidentpatient_ref",
         help_text='Create a new patient or select an existing patient to allocate a Patient ID (even if details of patient are not known at the time of the message)')
     cause_of_injury = models.TextField(null=True,
         help_text='What was the cause of the injury?')
@@ -144,11 +146,11 @@ class IncidentMessage(models.Model):
     # end of basic fields
 
     message_entry_timestamp = models.DateTimeField(auto_now_add=False, null=True) # Creates fixed timestamp recording the message entry time.
-    incident_ref = models.ForeignKey('IncidentPatient', null=True, blank=True, on_delete=models.SET_NULL, related_name="is_patient_ref",
+    incident_ref = models.ForeignKey('Incident', null=True, blank=True, on_delete=models.SET_NULL, related_name="is_incidentmessage_ref",
         help_text='Create a new patient or select an existing patient to allocate a Patient ID (even if details of patient are not known at the time of the message)')
     recipient = models.ForeignKey('Operator', null=True, blank=True, on_delete=models.SET_NULL, related_name='is_incident_recipient',
         help_text='Message was received by this Operator.')
-    sender = models.ForeignKey('Operator', null=True, blank=True, on_delete=models.SET_NULL, related_name='is_incident_sender',
+    sender = models.ForeignKey('Operator', null=True, blank=True, on_delete=models.SET_NULL, related_name='is_incidentmessage_sender',
         help_text='Message was sent by this Operator.')
     message_info = models.TextField(null=True, blank=True,
         help_text='Message details.')
