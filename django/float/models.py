@@ -116,11 +116,12 @@ class Incident(models.Model):
 
     # Incident Administration fields
     INCIDENT_MESSAGE_TYPE_CHOICES = [
-        ('C', 'Child Safety'),
-        ('E', 'Environmental'),
-        ('M', 'Medical'),
-        ('O', 'Other'),
-        ('S', 'Security'),
+        ('C', 'Child Safety - missing, endangered, threatened, etc'),
+        ('E', 'Environmental - location or structure based issues.'),
+        ('M', 'Medical - injuries and illness of people involved in the event.'),
+        ('O', 'Operational - preventing the effective execution of the event.'),
+        ('S', 'Security - threats to people involved in the event.'),
+        ('U', 'Undefined threats to the event.'),
     ]
     incident_message_type = models.CharField(
         blank=False, null=True, max_length=1, choices=INCIDENT_MESSAGE_TYPE_CHOICES, default='M',
