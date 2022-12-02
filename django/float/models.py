@@ -67,7 +67,7 @@ class Message(models.Model):
     def __str__(self):
         return f'{self.id}: {self.sender} -> {self.recipient}' # returns the {Message ID}: {Message Sender} -> {Message Recipient}.
 
-class EmergencyPatient(models.Model):
+class IncidentPatient(models.Model):
     id = models.BigAutoField(primary_key=True)
     history = HistoricalRecords()
     last_updated_timestamp = models.DateTimeField(auto_now=True, null=True) # Updates timestamp each time the object is save.
@@ -87,25 +87,25 @@ class EmergencyPatient(models.Model):
     def __str__(self):
         return f'{self.id}: {self.name[0]}' # returns Patient ID: Patient's first initial - this preserves privacy on the dashboard.
 
-class EmergencyMessage(models.Model):
+class IncidentMessage(models.Model):
     id = models.BigAutoField(primary_key=True)
     history = HistoricalRecords()
     last_updated_timestamp = models.DateTimeField(auto_now=True, null=True) # Updates timestamp each time the object is save.
     # end of basic fields
 
     message_entry_timestamp = models.DateTimeField(auto_now_add=False, null=True) # Creates fixed timestamp recording the message entry time.
-    recipient = models.ForeignKey('Operator', null=True, blank=True, on_delete=models.SET_NULL, related_name='is_emergency_recipient',
+    recipient = models.ForeignKey('Operator', null=True, blank=True, on_delete=models.SET_NULL, related_name='is_incident_recipient',
         help_text='Message was received by this Operator.')
-    sender = models.ForeignKey('Operator', null=True, blank=True, on_delete=models.SET_NULL, related_name='is_emergency_sender',
+    sender = models.ForeignKey('Operator', null=True, blank=True, on_delete=models.SET_NULL, related_name='is_incident_sender',
         help_text='Message was sent by this Operator.')
     # end of message transmission detail fields
 
     # Incident response fields
     event_occurance_timestamp = models.DateTimeField(auto_now_add=True, null=True,
-        help_text='Time of the emergency events occuring') # Creates editable timestamp recording the event time.
+        help_text='Time of the incident events occuring') # Creates editable timestamp recording the event time.
     reported_location = models.CharField(max_length=256, null=False, blank=True, 
         help_text='What is the reported location of the incident?')
-    patient_ref = models.ForeignKey('EmergencyPatient', null=True, blank=True, on_delete=models.SET_NULL, related_name="is_patient_ref",
+    patient_ref = models.ForeignKey('IncidentPatient', null=True, blank=True, on_delete=models.SET_NULL, related_name="is_patient_ref",
         help_text='Create a new patient or select an existing patient to allocate a Patient ID (even if details of patient are not known at the time of the message)')
     cause_of_injury = models.TextField(null=True,
         help_text='What was the cause of the injury?')
@@ -118,23 +118,23 @@ class EmergencyMessage(models.Model):
     # End of Incident response fields
 
     # Incident Administration fields
-    EMERGENCY_MESSAGE_TYPE_CHOICES = [
+    incident_MESSAGE_TYPE_CHOICES = [
         ('C', 'Child Safety'),
         ('E', 'Environmental'),
         ('M', 'Medical'),
         ('O', 'Other'),
         ('S', 'Security'),
     ]
-    emergency_message_type = models.CharField(
-        blank=False, null=True, max_length=1, choices=EMERGENCY_MESSAGE_TYPE_CHOICES, default='M',
-        help_text='Select the nature of the emergency incident.')
+    INCIDENT_MESSAGE_TYPE = models.CharField(
+        blank=False, null=True, max_length=1, choices=INCIDENT_MESSAGE_TYPE_CHOICES, default='M',
+        help_text='Select the nature of the incident.')
     
     Has_this_been_escalated = models.BooleanField(default=False,
         help_text='Select if this incident has been delegated to another authority, as specificed below:')
     escalated_to = models.CharField(null = True, max_length=160,
         help_text='Specify a 000 department, company, custodian, etc.')
-    emergency_action = models.TextField(null = True,
-        help_text='Briefly explain what has been done to address the emergency situation. Provide as much detail as necessary.')
+    incident_action = models.TextField(null = True,
+        help_text='Briefly explain what has been done to address the incident situation. Provide as much detail as necessary.')
     Has_this_been_controlled = models.BooleanField(default=False,
         help_text='Select if this incident has been controlled but has yet to be resolved.')
     Has_this_been_resolved = models.BooleanField(default=False,
@@ -143,8 +143,8 @@ class EmergencyMessage(models.Model):
     def __str__(self):
         return f'{self.id}: {self.sender} -> {self.recipient} @ {self.reported_location} ({self.patient_ref} | {self.nature_of_injury})'
 
-# class Incident(models.Model):
-#    id = models.BigAutoField(primary_key=True)
-#    history = HistoricalRecords()
-#    last_updated_timestamp = models.DateTimeField(auto_now=True) # Updates timestamp each time the object is save.
-#    # end of basic fields 
+class Incident(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    history = HistoricalRecords()
+    last_updated_timestamp = models.DateTimeField(auto_now=True) # Updates timestamp each time the object is save.
+    # end of basic fields 
