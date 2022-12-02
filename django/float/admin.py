@@ -16,13 +16,14 @@ class OperatorAdmin(SimpleHistoryAdmin):
 
 class MessageAdmin(SimpleHistoryAdmin):
     list_display = ('id', 'sender', 'recipient', 'reported_location', 'message_entry_timestamp', 'last_updated_timestamp', 'message_info',)
+    list_editable = ()
 
 class IncidentPatientAdmin(SimpleHistoryAdmin):
     list_display = ('id', 'name', 'age', 'gender', 'incident_ref', 'last_updated_timestamp',)
     list_filter = ('incident_ref',)
 
 class IncidentAdmin(SimpleHistoryAdmin):
-    list_display = ('id', 'reported_location', 'patient_ref', 'incident_message_type', 'nature_of_injury', 'has_this_been_escalated', 'is_incident_controlled', 'is_incident_resolved', 'last_updated_timestamp',)
+    list_display = ('id', 'reported_location', 'event_occurance_timestamp', 'patient_ref', 'incident_message_type', 'nature_of_injury', 'has_this_been_escalated', 'is_incident_controlled', 'is_incident_resolved', 'last_updated_timestamp',)
     list_filter = ('reported_location', 'incident_message_type', 'patient_ref', 'has_this_been_escalated', 'is_incident_controlled', 'is_incident_resolved',)
 
 # class IncidentMessageAdmin(SimpleHistoryAdmin):
