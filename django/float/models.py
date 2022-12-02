@@ -44,7 +44,7 @@ class Operator(models.Model):
         help_text='Provide the order in which you wish to have this operator appear in the Message dropdown.')
 
     def __str__(self):
-        return f'{self.name} ({self.role}): {self.base}' # returns the Operator's name, role, and assigned location
+        return f'{self.name}: {self.base}' # returns the Operator's name, role, and assigned location
         # this helps reconcile the reported location of the Operator with their assigned location and the reported 
         # location to assess if further support is required in the field.
 
@@ -55,10 +55,10 @@ class Message(models.Model):
     # end of basic fields
 
     message_entry_timestamp = models.DateTimeField(auto_now_add=False, null=True) # Records a timestamp for when the message was initially added.
-    recipient = models.ForeignKey('Operator', null=True, blank=True, on_delete=models.SET_NULL, related_name='is_recipient',
-        help_text='Message was received by this Operator.')
     sender = models.ForeignKey('Operator', null=True, blank=True, on_delete=models.SET_NULL, related_name='is_sender',
         help_text='Message was sent by this Operator.')
+    recipient = models.ForeignKey('Operator', null=True, blank=True, on_delete=models.SET_NULL, related_name='is_recipient',
+        help_text='Message was received by this Operator.')
     reported_location = models.CharField(max_length=256, null=True, blank=True,
         help_text='Sender Operator\'s reported location, if provided - recipient location should be recorded if needed as message info.')
     message_info = models.TextField(null=True, blank=True,
@@ -124,15 +124,15 @@ class Incident(models.Model):
         blank=False, null=True, max_length=1, choices=INCIDENT_MESSAGE_TYPE_CHOICES, default='M',
         help_text='Select the nature of the incident.')
     
-    Has_this_been_escalated = models.BooleanField(default=False,
+    has_this_been_escalated = models.BooleanField(default=False,
         help_text='Select if this incident has been delegated to another authority, as specificed below:')
     escalated_to = models.CharField(null = True, max_length=160,
         help_text='Specify a 000 department, company, custodian, etc.')
-    incident_action = models.TextField(null = True,
+    action_taken = models.TextField(null = True,
         help_text='Briefly explain what has been done to address the incident situation. Provide as much detail as necessary.')
-    Has_this_been_controlled = models.BooleanField(default=False,
+    is_incident_controlled = models.BooleanField(default=False,
         help_text='Select if this incident has been controlled but has yet to be resolved.')
-    Has_this_been_resolved = models.BooleanField(default=False,
+    is_incident_resolved = models.BooleanField(default=False,
         help_text='Select if this incident has been resolved and no further action is required.')
     # End of Incident Administration fields
 
@@ -148,16 +148,15 @@ class IncidentMessage(models.Model):
     message_entry_timestamp = models.DateTimeField(auto_now_add=False, null=True) # Creates fixed timestamp recording the message entry time.
     incident_ref = models.ForeignKey('Incident', null=True, blank=True, on_delete=models.SET_NULL, related_name="is_incidentmessage_ref",
         help_text='Create a new patient or select an existing patient to allocate a Patient ID (even if details of patient are not known at the time of the message)')
-    recipient = models.ForeignKey('Operator', null=True, blank=True, on_delete=models.SET_NULL, related_name='is_incident_recipient',
-        help_text='Message was received by this Operator.')
     sender = models.ForeignKey('Operator', null=True, blank=True, on_delete=models.SET_NULL, related_name='is_incidentmessage_sender',
         help_text='Message was sent by this Operator.')
+    recipient = models.ForeignKey('Operator', null=True, blank=True, on_delete=models.SET_NULL, related_name='is_incident_recipient',
+        help_text='Message was received by this Operator.')
+    reported_location = models.CharField(max_length=256, null=True, blank=True,
+        help_text='Sender Operator\'s reported location, if provided - recipient location should be recorded if needed as message info.')
     message_info = models.TextField(null=True, blank=True,
         help_text='Message details.')
     # end of message transmission detail fields
 
     def __str__(self):
         return f'Message #{self.id}: {self.sender} -> {self.recipient} RE: {self.incident_ref}' # returns the {Message ID}: {Message Sender} -> {Message Recipient}, and Incident summary
-
-    
-
