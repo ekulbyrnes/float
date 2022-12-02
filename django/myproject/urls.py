@@ -52,3 +52,7 @@ urlpatterns = [
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+admin.site.site_header = "Float: the Log on a Stream"
+admin.site.site_title = "Float Admin Portal"
+admin.site.index_title = "Welcome to the Float Portal"
