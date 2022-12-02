@@ -63,9 +63,11 @@ class Message(models.Model):
         help_text='Sender Operator\'s reported location, if provided - recipient location should be recorded if needed as message info.')
     message_info = models.TextField(null=True, blank=True,
         help_text='Message details.')
+    incident_ref = models.ForeignKey('Incident', null=True, blank=True, on_delete=models.SET_NULL, related_name="is_incidentmessage_ref",
+        help_text='Create a new incident or select an existing incident.')
     
     def __str__(self):
-        return f'{self.id}: {self.sender} -> {self.recipient}' # returns the {Message ID}: {Message Sender} -> {Message Recipient}.
+        return f'Message #{self.id}: {self.sender} -> {self.recipient} RE: {self.incident_ref}' # returns the {Message ID}: {Message Sender} -> {Message Recipient}, and Incident summary
 
 class IncidentPatient(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -139,24 +141,24 @@ class Incident(models.Model):
     def __str__(self):
         return f'Incident #{self.id}: @ {self.reported_location} [{self.patient_ref} | {self.nature_of_injury}]'
 
-class IncidentMessage(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    history = HistoricalRecords()
-    last_updated_timestamp = models.DateTimeField(auto_now=True, null=True) # Updates timestamp each time the object is save.
-    # end of basic fields
+#class IncidentMessage(models.Model):
+#    id = models.BigAutoField(primary_key=True)
+#    history = HistoricalRecords()
+#    last_updated_timestamp = models.DateTimeField(auto_now=True, null=True) # Updates timestamp each time the object is save.
+#    # end of basic fields
 
-    message_entry_timestamp = models.DateTimeField(auto_now_add=False, null=True) # Creates fixed timestamp recording the message entry time.
-    incident_ref = models.ForeignKey('Incident', null=True, blank=True, on_delete=models.SET_NULL, related_name="is_incidentmessage_ref",
-        help_text='Create a new patient or select an existing patient to allocate a Patient ID (even if details of patient are not known at the time of the message)')
-    sender = models.ForeignKey('Operator', null=True, blank=True, on_delete=models.SET_NULL, related_name='is_incidentmessage_sender',
-        help_text='Message was sent by this Operator.')
-    recipient = models.ForeignKey('Operator', null=True, blank=True, on_delete=models.SET_NULL, related_name='is_incident_recipient',
-        help_text='Message was received by this Operator.')
-    reported_location = models.CharField(max_length=256, null=True, blank=True,
-        help_text='Sender Operator\'s reported location, if provided - recipient location should be recorded if needed as message info.')
-    message_info = models.TextField(null=True, blank=True,
-        help_text='Message details.')
-    # end of message transmission detail fields
+#    message_entry_timestamp = models.DateTimeField(auto_now_add=False, null=True) # Creates fixed timestamp recording the message entry time.
+#    incident_ref = models.ForeignKey('Incident', null=True, blank=True, on_delete=models.SET_NULL, related_name="is_incidentmessage_ref",
+#        help_text='Create a new patient or select an existing patient to allocate a Patient ID (even if details of patient are not known at the time of the message)')
+#    sender = models.ForeignKey('Operator', null=True, blank=True, on_delete=models.SET_NULL, related_name='is_incidentmessage_sender',
+#        help_text='Message was sent by this Operator.')
+#    recipient = models.ForeignKey('Operator', null=True, blank=True, on_delete=models.SET_NULL, related_name='is_incident_recipient',
+#        help_text='Message was received by this Operator.')
+#    reported_location = models.CharField(max_length=256, null=True, blank=True,
+#        help_text='Sender Operator\'s reported location, if provided - recipient location should be recorded if needed as message info.')
+#    message_info = models.TextField(null=True, blank=True,
+#        help_text='Message details.')
+#    # end of message transmission detail fields
 
-    def __str__(self):
-        return f'Message #{self.id}: {self.sender} -> {self.recipient} RE: {self.incident_ref}' # returns the {Message ID}: {Message Sender} -> {Message Recipient}, and Incident summary
+#    def __str__(self):
+#        return f'Message #{self.id}: {self.sender} -> {self.recipient} RE: {self.incident_ref}' # returns the {Message ID}: {Message Sender} -> {Message Recipient}, and Incident summary
