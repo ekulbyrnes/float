@@ -5,73 +5,74 @@ from simple_history.models import HistoricalRecords
 # Create your models here.
 
 class Role(models.Model):
+    id = models.BigAutoField(primary_key=True)
     history = HistoricalRecords()
-    title = models.CharField(max_length=50)
+    last_updated_timestamp = models.DateTimeField(auto_now=True)
+    title = models.CharField(max_length=50, null=False)
 
     def __str__(self):
         return self.title
 
-class RoleAdmin(admin.ModelAdmin):
-    history = HistoricalRecords()
-    list_display = ('title')
-
 class Place(models.Model):
+    id = models.BigAutoField(primary_key=True)
     history = HistoricalRecords()
-    place = models.CharField(max_length=50)
+    last_updated_timestamp = models.DateTimeField(auto_now=True)
+    place = models.CharField(max_length=50, null=False)
 
     def __str__(self):
         return self.place
 
-class PlaceAdmin(admin.ModelAdmin):
-    history = HistoricalRecords()
-    list_display = ('place')
-
 class Operator(models.Model):
+    id = models.BigAutoField(primary_key=True)
     history = HistoricalRecords()
+    last_updated_timestamp = models.DateTimeField(auto_now=True)
     name = models.CharField(max_length=50)
     role = models.ForeignKey('Role', blank=True, null=True, on_delete=models.SET_NULL, related_name='is_role')
     base = models.ForeignKey('Place', blank=True, null=True, on_delete=models.SET_NULL, related_name='is_base')
-    order = models.IntegerField(null=True)
+    command_weighting = models.PositiveIntegerField(null=True)
 
     def __str__(self):
-        return f'{self.base} | {self.name} ({self.role})'
-
-class OperatorAdmin(admin.ModelAdmin):
-    history = HistoricalRecords()
-    list_display = ('name', 'role', 'base', 'order')
+        return f'{self.name} ({self.role}): {self.base}'
 
 class Message(models.Model):
+    id = models.BigAutoField(primary_key=True)
     history = HistoricalRecords()
+    last_updated_timestamp = models.DateTimeField(auto_now=True)
+    message_entry_timestamp = models.DateTimeField(auto_now_add=False)
     recipient = models.ForeignKey('Operator', blank=True, null=True, on_delete=models.SET_NULL, related_name='is_recipient')
     sender = models.ForeignKey('Operator', blank=True, null=True, on_delete=models.SET_NULL, related_name='is_sender')
-    location = models.CharField(max_length=256, blank=True)
-    message_info = models.TextField()
+    current_location = models.CharField(max_length=256, null=True, blank=True)
+    message_info = models.TextField(null=True)
     
     def __str__(self):
-        return f'{self.sender} -> {self.recipient}: "{self.message_info}"'
+        return f'{self.id}: {self.sender} -> {self.recipient}'
 
 class EmergencyPatient(models.Model):
+    id = models.BigAutoField(primary_key=True)
     history = HistoricalRecords()
-    patient_ref = models.CharField(max_length=6, null=False)
-    name = models.CharField(max_length=256, null=False)
-    age = models.IntegerField(null=True)
-    gender = models.CharField(max_length=50, null=True)
-    contact_email = models.CharField(max_length = 256, null=True)
-    contact_phone = models.CharField(max_length = 20, null=True)
+    name = models.CharField(max_length=256, null=True, default='unknown', help_text='Obtain if required for follow up after incident has been controlled.')
+    age = models.IntegerField(null=True, )
+    gender = models.CharField(max_length=50, null=True, )
+    contact_email = models.CharField(max_length = 256, null=True, help_text='Obtain if required for follow up after incident has been controlled.')
+    contact_phone = models.CharField(max_length = 20, null=True, help_text='Obtain if required for follow up after incident has been controlled.')
 
     def __str__(self):
-        return f'{self.patient_ref}: {self.name}'
+        return f'{self.id}: {self.name[0]}'
 
 class EmergencyMessage(models.Model):
+    id = models.BigAutoField(primary_key=True)
     history = HistoricalRecords()
+    last_updated_timestamp = models.DateTimeField(auto_now=True)
+    emergency_message_entry_timestamp = models.DateTimeField(auto_now_add=False)
+    event_occurance_timestamp = models.DateTimeField(auto_now_add=True)
     recipient = models.ForeignKey('Operator', blank=True, null=True, on_delete=models.SET_NULL, related_name='is_emergency_recipient')
     sender = models.ForeignKey('Operator', blank=True, null=True, on_delete=models.SET_NULL, related_name='is_emergency_sender')
-    location = models.CharField(max_length=256, blank=True)
+    current_location = models.CharField(max_length=256, blank=True, help_text='What is the current location of the incident?')
     patient_ref = models.ForeignKey('EmergencyPatient', blank=True, null=True, on_delete=models.SET_NULL, related_name="is_patient_ref")
     cause_of_injury = models.TextField(null=True, help_text='What was the cause of the injury?')
     nature_of_injury = models.TextField(null=True, help_text='What is the nature of the injury?')
     effects_of_injury = models.TextField(null=True, help_text='What are the signs/symptoms of the injury, other observations?')
-    Treatment_Provided = models.TextField(null=True, help_text='What treatment has been provided to the injury at this')
+    treatment_provided = models.TextField(null=True, help_text='What treatment has been provided to the injury at this')
     
     EMERGENCY_MESSAGE_TYPE_CHOICES = [
         ('S', 'Security'),
