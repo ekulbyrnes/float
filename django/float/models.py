@@ -87,7 +87,7 @@ class IncidentPatient(models.Model):
         help_text='Create a new patient or select an existing patient to allocate a Patient ID (even if details of patient are not known at the time of the message)')
 
     def __str__(self):
-        return f'{self.id}: {self.name[0]}' # returns Patient ID: Patient's first initial - this preserves privacy on the dashboard.
+        return f'Patient #{self.id}: {self.name[0]} ({self.gender}, {self.age})' # returns Patient ID: Patient's first initial - this preserves privacy on the dashboard.
 
 class Incident(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -137,7 +137,7 @@ class Incident(models.Model):
     # End of Incident Administration fields
 
     def __str__(self):
-        return f'{self.id}: {self.sender} -> {self.recipient} @ {self.reported_location} ({self.patient_ref} | {self.nature_of_injury})'
+        return f'Incident #{self.id}: @ {self.reported_location} [{self.patient_ref} | {self.nature_of_injury}]'
 
 class IncidentMessage(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -156,7 +156,8 @@ class IncidentMessage(models.Model):
         help_text='Message details.')
     # end of message transmission detail fields
 
-    
+    def __str__(self):
+        return f'Message #{self.id}: {self.sender} -> {self.recipient} RE: {self.incident_ref}' # returns the {Message ID}: {Message Sender} -> {Message Recipient}, and Incident summary
 
     
 
