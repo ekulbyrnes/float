@@ -87,20 +87,13 @@ class IncidentPatient(models.Model):
     def __str__(self):
         return f'{self.id}: {self.name[0]}' # returns Patient ID: Patient's first initial - this preserves privacy on the dashboard.
 
-class IncidentMessage(models.Model):
+class Incident(models.Model):
     id = models.BigAutoField(primary_key=True)
     history = HistoricalRecords()
-    last_updated_timestamp = models.DateTimeField(auto_now=True, null=True) # Updates timestamp each time the object is save.
+    last_updated_timestamp = models.DateTimeField(auto_now=True) # Updates timestamp each time the object is save.
     # end of basic fields
 
-    message_entry_timestamp = models.DateTimeField(auto_now_add=False, null=True) # Creates fixed timestamp recording the message entry time.
-    recipient = models.ForeignKey('Operator', null=True, blank=True, on_delete=models.SET_NULL, related_name='is_incident_recipient',
-        help_text='Message was received by this Operator.')
-    sender = models.ForeignKey('Operator', null=True, blank=True, on_delete=models.SET_NULL, related_name='is_incident_sender',
-        help_text='Message was sent by this Operator.')
-    # end of message transmission detail fields
-
-    # Incident response fields
+    # Begin Incident Report
     event_occurance_timestamp = models.DateTimeField(auto_now_add=True, null=True,
         help_text='Time of the incident events occuring') # Creates editable timestamp recording the event time.
     reported_location = models.CharField(max_length=256, null=False, blank=True, 
@@ -115,17 +108,17 @@ class IncidentMessage(models.Model):
         help_text='What are the signs/symptoms of the injury, other observations?')
     treatment_provided = models.TextField(null=True,
         help_text='What treatment has been provided to the injury at this')
-    # End of Incident response fields
+    # End of Incident Report fields 
 
     # Incident Administration fields
-    incident_MESSAGE_TYPE_CHOICES = [
+    INCIDENT_MESSAGE_TYPE_CHOICES = [
         ('C', 'Child Safety'),
         ('E', 'Environmental'),
         ('M', 'Medical'),
         ('O', 'Other'),
         ('S', 'Security'),
     ]
-    INCIDENT_MESSAGE_TYPE = models.CharField(
+    incident_message_type = models.CharField(
         blank=False, null=True, max_length=1, choices=INCIDENT_MESSAGE_TYPE_CHOICES, default='M',
         help_text='Select the nature of the incident.')
     
@@ -139,12 +132,29 @@ class IncidentMessage(models.Model):
         help_text='Select if this incident has been controlled but has yet to be resolved.')
     Has_this_been_resolved = models.BooleanField(default=False,
         help_text='Select if this incident has been resolved and no further action is required.')
+    # End of Incident Administration fields
 
     def __str__(self):
         return f'{self.id}: {self.sender} -> {self.recipient} @ {self.reported_location} ({self.patient_ref} | {self.nature_of_injury})'
 
-class Incident(models.Model):
+class IncidentMessage(models.Model):
     id = models.BigAutoField(primary_key=True)
     history = HistoricalRecords()
-    last_updated_timestamp = models.DateTimeField(auto_now=True) # Updates timestamp each time the object is save.
-    # end of basic fields 
+    last_updated_timestamp = models.DateTimeField(auto_now=True, null=True) # Updates timestamp each time the object is save.
+    # end of basic fields
+
+    message_entry_timestamp = models.DateTimeField(auto_now_add=False, null=True) # Creates fixed timestamp recording the message entry time.
+    incident_ref = models.ForeignKey('IncidentPatient', null=True, blank=True, on_delete=models.SET_NULL, related_name="is_patient_ref",
+        help_text='Create a new patient or select an existing patient to allocate a Patient ID (even if details of patient are not known at the time of the message)')
+    recipient = models.ForeignKey('Operator', null=True, blank=True, on_delete=models.SET_NULL, related_name='is_incident_recipient',
+        help_text='Message was received by this Operator.')
+    sender = models.ForeignKey('Operator', null=True, blank=True, on_delete=models.SET_NULL, related_name='is_incident_sender',
+        help_text='Message was sent by this Operator.')
+    message_info = models.TextField(null=True, blank=True,
+        help_text='Message details.')
+    # end of message transmission detail fields
+
+    
+
+    
+
