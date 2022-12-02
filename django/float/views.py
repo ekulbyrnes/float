@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Role, Place, Operator, Message, EmergencyPatient, EmergencyMessage
+from .models import Role, Place, Operator, Message, IncidentPatient, IncidentMessage
 from django.http import HttpResponse
 
 # Create your views here.
