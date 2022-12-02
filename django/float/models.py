@@ -72,7 +72,7 @@ class EmergencyMessage(models.Model):
         blank=False, null=True, max_length=1, choices=EMERGENCY_MESSAGE_TYPE_CHOICES, default='M')
     
     Has_this_been_escalated = models.BooleanField(default=False)
-    escalated_to = models.CharField(max_length=160)
+    escalated_to = models.CharField(null = True, max_length=160)
     emergency_action = models.TextField()
     Has_this_been_resolved = models.BooleanField(default=False)
 
@@ -83,15 +83,3 @@ class EmergencyMessage(models.Model):
     class MessageAdmin(admin.ModelAdmin):
     list_display = ('recipient', 'sender', 'location', 'message_info')  
     '''
-
-
-'''
-IMIST Situation Report:
------------------------
-
-(I)dentification of Patient         [using initials and Patrol number]
-(M)echanism of the injury           [the cause of distress]
-(I)njury/Information/Conditions     [nature of distress]
-(S)igns/Symptoms and observations   [effects of injury]
-(T)reatment provided                [describe if any]
-'''
