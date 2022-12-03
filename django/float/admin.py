@@ -15,8 +15,13 @@ class OperatorAdmin(SimpleHistoryAdmin):
     ordering = ('command_weighting',)
 
 class MessageAdmin(SimpleHistoryAdmin):
-    list_display = ('id', 'sender', 'recipient', 'reported_location', 'message_entry_timestamp', 'last_updated_timestamp', 'message_info',)
+    list_display = ('id', 'sender', 'recipient', 'reported_location', 'message_entry_timestamp', 'last_updated_user', 'last_updated_timestamp', 'message_info',)
     list_editable = ()
+    exclude = ('last_updated_user',)
+
+    def save_model(self, request, obj, form, change):
+        obj.last_updated_user = request.user
+        super().save_model(request, obj, form, change)
 
 class IncidentPatientAdmin(SimpleHistoryAdmin):
     list_display = ('id', 'name', 'age', 'gender', 'incident_ref', 'last_updated_timestamp',)
