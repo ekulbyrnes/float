@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 from simple_history.models import HistoricalRecords
+from django.utils import timezone
 
 # Create your models here.
 
@@ -62,7 +63,7 @@ class Message(models.Model):
     last_updated_timestamp = models.DateTimeField(auto_now=True, null=True) # Updates timestamp each time the object is save.
     # end of basic fields
 
-    message_entry_timestamp = models.DateTimeField(auto_now_add=False, null=True) # Records a timestamp for when the message was initially added.
+    message_entry_timestamp = models.DateTimeField(auto_now_add=False, default=timezone.now, null=True) # Records a timestamp for when the message was initially added.
     sender = models.ForeignKey('Operator', null=True, blank=True, on_delete=models.SET_NULL, related_name='is_sender',
         help_text='Message was sent by this Operator.')
     recipient = models.ForeignKey('Operator', null=True, blank=True, on_delete=models.SET_NULL, related_name='is_recipient',
