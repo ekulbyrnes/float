@@ -68,6 +68,9 @@ class Operator(models.Model):
         # this helps reconcile the reported location of the Operator with their assigned location and the reported
         # location to assess if further support is required in the field.
 
+    class Meta:
+        ordering = ('command_weighting', 'name')
+
 class Message(models.Model):
     id = models.BigAutoField(primary_key=True)
     history = HistoricalRecords()

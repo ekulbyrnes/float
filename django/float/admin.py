@@ -38,7 +38,6 @@ class SecurityAdmin(SimpleHistoryAdmin):
 
 class OperatorAdmin(SimpleHistoryAdmin):
     list_display = ('name', 'base', 'role', 'command_weighting', 'last_updated_timestamp',)
-    ordering = ('command_weighting',)
 
 class MessageAdmin(SimpleHistoryAdmin):
     list_display = ('id', 'sender', 'recipient', 'reported_location', 'message_entry_timestamp', 'last_updated_user', 'last_updated_timestamp', 'message_info',)
