@@ -113,13 +113,13 @@ class Incident(models.Model):
         help_text='What is the reported location of the incident?')
     patient_ref = models.ForeignKey('IncidentPatient', null=True, blank=True, on_delete=models.SET_NULL, related_name="is_incidentpatient_ref",
         help_text='Create a new patient or select an existing patient to allocate a Patient ID (even if details of patient are not known at the time of the message)')
-    cause_of_injury = models.TextField(null=True,
+    cause_of_injury = models.TextField(null=True, blank=True,
         help_text='What was the cause of the injury?')
-    nature_of_injury = models.TextField(null=True,
+    nature_of_injury = models.TextField(null=True, blank=True,
         help_text='What is the nature of the injury?')
-    effects_of_injury = models.TextField(null=True,
+    effects_of_injury = models.TextField(null=True, blank=True,
         help_text='What are the signs/symptoms of the injury, other observations?')
-    treatment_provided = models.TextField(null=True,
+    treatment_provided = models.TextField(null=True, blank=True,
         help_text='What treatment has been provided to the injury at this')
     # End of Incident Report fields
 
