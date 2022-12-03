@@ -138,9 +138,9 @@ class Incident(models.Model):
 
     has_this_been_escalated = models.BooleanField(default=False,
         help_text='Select if this incident has been delegated to another authority, as specificed below:')
-    escalated_to = models.CharField(null = True, max_length=160,
+    escalated_to = models.CharField(null=True, blank=True, max_length=160,
         help_text='Specify a 000 department, company, custodian, etc.')
-    action_taken = models.TextField(null = True,
+    action_taken = models.TextField(null=True, blank=True,
         help_text='Briefly explain what has been done to address the incident situation. Provide as much detail as necessary.')
     is_incident_controlled = models.BooleanField(default=False,
         help_text='Select if this incident has been controlled but has yet to be resolved.')
