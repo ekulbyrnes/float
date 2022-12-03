@@ -54,7 +54,7 @@ class Operator(models.Model):
         # location to assess if further support is required in the field.
 
     class Meta:
-        ordering = ('command_weighting', 'name')
+        ordering = ('command_weighting', 'callsign', 'name')
 
 class Message(models.Model):
     id = models.BigAutoField(primary_key=True)
