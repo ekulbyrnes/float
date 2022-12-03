@@ -36,7 +36,7 @@ class Operator(models.Model):
 
     name = models.CharField(max_length=50,
         help_text='Name of the Operator.')
-    role = models.ForeignKey('Role', null=True, blank=True, on_delete=models.SET_NULL, related_name='is_role', 
+    role = models.ForeignKey('Role', null=True, blank=True, on_delete=models.SET_NULL, related_name='is_role',
         help_text='Select the role of the Operator from the list.')
     base = models.ForeignKey('Place', null=True, blank=True, on_delete=models.SET_NULL, related_name='is_base',
         help_text='Select the place the Operator is assigned to from the list.')
@@ -45,7 +45,7 @@ class Operator(models.Model):
 
     def __str__(self):
         return f'{self.name}: {self.base}' # returns the Operator's name, role, and assigned location
-        # this helps reconcile the reported location of the Operator with their assigned location and the reported 
+        # this helps reconcile the reported location of the Operator with their assigned location and the reported
         # location to assess if further support is required in the field.
 
 class Message(models.Model):
@@ -66,7 +66,7 @@ class Message(models.Model):
         help_text='Message details.')
     incident_ref = models.ForeignKey('Incident', null=True, blank=True, on_delete=models.SET_NULL, related_name="is_incidentmessage_ref",
         help_text='Create a new incident or select an existing incident.')
-    
+
     def __str__(self):
         return f'Message #{self.id}: {self.sender} -> {self.recipient} RE: {self.incident_ref}' # returns the {Message ID}: {Message Sender} -> {Message Recipient}, and Incident summary
 
@@ -101,7 +101,7 @@ class Incident(models.Model):
     # Begin Incident Report
     event_occurance_timestamp = models.DateTimeField(auto_now_add=True, null=True,
         help_text='Time of the incident events occuring') # Creates editable timestamp recording the event time.
-    reported_location = models.CharField(max_length=256, null=False, blank=True, 
+    reported_location = models.CharField(max_length=256, null=False, blank=True,
         help_text='What is the reported location of the incident?')
     patient_ref = models.ForeignKey('IncidentPatient', null=True, blank=True, on_delete=models.SET_NULL, related_name="is_incidentpatient_ref",
         help_text='Create a new patient or select an existing patient to allocate a Patient ID (even if details of patient are not known at the time of the message)')
@@ -113,7 +113,7 @@ class Incident(models.Model):
         help_text='What are the signs/symptoms of the injury, other observations?')
     treatment_provided = models.TextField(null=True,
         help_text='What treatment has been provided to the injury at this')
-    # End of Incident Report fields 
+    # End of Incident Report fields
 
     # Incident Administration fields
     INCIDENT_MESSAGE_TYPE_CHOICES = [
@@ -127,7 +127,7 @@ class Incident(models.Model):
     incident_message_type = models.CharField(
         blank=False, null=True, max_length=1, choices=INCIDENT_MESSAGE_TYPE_CHOICES, default='M',
         help_text='Select the nature of the incident.')
-    
+
     has_this_been_escalated = models.BooleanField(default=False,
         help_text='Select if this incident has been delegated to another authority, as specificed below:')
     escalated_to = models.CharField(null = True, max_length=160,
