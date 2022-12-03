@@ -59,6 +59,8 @@ class Operator(models.Model):
         help_text='Name of the Operator.')
     email = models.EmailField(null=True, blank=True)
     phone = models.CharField(max_length=20, null=True, blank=True)
+    callsign = models.CharField(max_length=50, null=True, blank=True,
+        help_text='Callsign of the Operator.')
     role = models.ForeignKey('Role', null=True, blank=True, on_delete=models.SET_NULL, related_name='is_operator_role',
         help_text='Select the role of the Operator from the list.')
     base = models.ForeignKey('Place', null=True, blank=True, on_delete=models.SET_NULL, related_name='is_operator_base',
