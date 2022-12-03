@@ -57,7 +57,7 @@ django
 | - __init__.py
 | - asgi.py
 | - settings.py
-| - urls.py         # This file maps urls to the app         
+| - urls.py         # This file maps urls to the app
 | - wsgi.py
 
 ```
