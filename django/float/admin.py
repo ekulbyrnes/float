@@ -35,6 +35,7 @@ class PlaceAdmin(SimpleHistoryAdmin):
 
 class OperatorAdmin(SimpleHistoryAdmin):
     list_display = ('name', 'callsign', 'base', 'role', 'phone', 'email', 'command_weighting', 'last_updated_timestamp',)
+    list_filter = ('role',)
     search_fields = ['name', 'callsign',]
 
 class MessageAdmin(SimpleHistoryAdmin):
