@@ -43,7 +43,7 @@ class Security(models.Model):
 
     def __str__(self):
         return f'{self.callsign}: {self.base}' # returns the Security's name, role, and assigned location
-        # this helps reconcile the reported location of the Operator with their assigned location and the reported 
+        # this helps reconcile the reported location of the Operator with their assigned location and the reported
         # location to assess if further support is required in the field.
 
 class Operator(models.Model):
@@ -54,6 +54,8 @@ class Operator(models.Model):
 
     name = models.CharField(max_length=50,
         help_text='Name of the Operator.')
+    email = models.EmailField(null=True, blank=True)
+    phone = models.CharField(max_length=20, null=True, blank=True)
     role = models.ForeignKey('Role', null=True, blank=True, on_delete=models.SET_NULL, related_name='is_operator_role',
         help_text='Select the role of the Operator from the list.')
     base = models.ForeignKey('Place', null=True, blank=True, on_delete=models.SET_NULL, related_name='is_operator_base',
