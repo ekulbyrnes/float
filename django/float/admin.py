@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Role, Place, Operator, Message, IncidentPatient, Incident #, IncidentMessage,
+from .models import Role, Place, Operator, Security, Message, IncidentPatient, Incident #, IncidentMessage,
 from simple_history.admin import SimpleHistoryAdmin
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
@@ -33,6 +33,9 @@ class RoleAdmin(SimpleHistoryAdmin):
 class PlaceAdmin(SimpleHistoryAdmin):
     list_display = ('place',)
 
+class SecurityAdmin(SimpleHistoryAdmin):
+    list_display = ('name', 'callsign', 'base', 'last_updated_timestamp',)
+
 class OperatorAdmin(SimpleHistoryAdmin):
     list_display = ('name', 'base', 'role', 'command_weighting', 'last_updated_timestamp',)
     ordering = ('command_weighting',)
@@ -62,6 +65,7 @@ class IncidentAdmin(SimpleHistoryAdmin):
 
 admin.site.register(Role, RoleAdmin)
 admin.site.register(Place, PlaceAdmin)
+admin.site.register(Security, SecurityAdmin)
 admin.site.register(Operator, OperatorAdmin)
 admin.site.register(Message, MessageAdmin)
 admin.site.register(IncidentPatient, IncidentPatientAdmin)

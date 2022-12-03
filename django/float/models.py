@@ -1,5 +1,5 @@
-from django.db import models
 from django.conf import settings
+from django.db import models
 from simple_history.models import HistoricalRecords
 
 # Create your models here.
@@ -28,6 +28,24 @@ class Place(models.Model):
     def __str__(self):
         return self.place # returns the Place (assigned location)
 
+class Security(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    history = HistoricalRecords()
+    last_updated_timestamp = models.DateTimeField(auto_now=True, null=True) # Updates timestamp each time the object is save.
+    # end of basic fields
+
+    name = models.CharField(max_length=50,
+        help_text='Name of the Security detail.')
+    callsign = models.CharField(max_length=50,
+        help_text='Callsign of the Security detail.')
+    base = models.ForeignKey('Place', null=True, blank=True, on_delete=models.SET_NULL, related_name='is_security_base',
+        help_text='Select the place the Security detail is assigned to from the list.')
+
+    def __str__(self):
+        return f'{self.callsign}: {self.base}' # returns the Security's name, role, and assigned location
+        # this helps reconcile the reported location of the Operator with their assigned location and the reported 
+        # location to assess if further support is required in the field.
+
 class Operator(models.Model):
     id = models.BigAutoField(primary_key=True)
     history = HistoricalRecords()
@@ -36,9 +54,9 @@ class Operator(models.Model):
 
     name = models.CharField(max_length=50,
         help_text='Name of the Operator.')
-    role = models.ForeignKey('Role', null=True, blank=True, on_delete=models.SET_NULL, related_name='is_role',
+    role = models.ForeignKey('Role', null=True, blank=True, on_delete=models.SET_NULL, related_name='is_operator_role',
         help_text='Select the role of the Operator from the list.')
-    base = models.ForeignKey('Place', null=True, blank=True, on_delete=models.SET_NULL, related_name='is_base',
+    base = models.ForeignKey('Place', null=True, blank=True, on_delete=models.SET_NULL, related_name='is_operator_base',
         help_text='Select the place the Operator is assigned to from the list.')
     command_weighting = models.PositiveIntegerField(null=True,
         help_text='Provide the order in which you wish to have this operator appear in the Message dropdown.')
