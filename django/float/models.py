@@ -1,5 +1,5 @@
-from django.contrib import admin
 from django.db import models
+from django.conf import settings
 from simple_history.models import HistoricalRecords
 
 # Create your models here.
@@ -51,6 +51,7 @@ class Operator(models.Model):
 class Message(models.Model):
     id = models.BigAutoField(primary_key=True)
     history = HistoricalRecords()
+    last_updated_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     last_updated_timestamp = models.DateTimeField(auto_now=True, null=True) # Updates timestamp each time the object is save.
     # end of basic fields
 
