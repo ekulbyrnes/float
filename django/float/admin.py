@@ -37,7 +37,7 @@ class OperatorAdmin(SimpleHistoryAdmin):
     list_display = ('name', 'callsign', 'base', 'role', 'phone', 'email', 'command_weighting', 'last_updated_timestamp',)
     list_filter = ('role', 'base')
     search_fields = ['name', 'callsign',]
-    list_editable = ('callsign',)
+    list_editable = ()
 
 class MessageAdmin(SimpleHistoryAdmin):
     list_display = ('id', 'sender', 'recipient', 'reported_location', 'message_entry_timestamp', 'last_updated_user', 'last_updated_timestamp', 'message_info',)
