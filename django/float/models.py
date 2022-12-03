@@ -47,7 +47,7 @@ class Security(models.Model):
         # location to assess if further support is required in the field.
 
     class Meta:
-        ordering = ('callsign')
+        ordering = ('callsign', 'name')
 
 class Operator(models.Model):
     id = models.BigAutoField(primary_key=True)
