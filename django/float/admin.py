@@ -38,8 +38,8 @@ class SecurityAdmin(SimpleHistoryAdmin):
     search_fields = ['name',]
 
 class OperatorAdmin(SimpleHistoryAdmin):
-    list_display = ('name', 'base', 'role', 'phone', 'email', 'command_weighting', 'last_updated_timestamp',)
-    search_fields = ['name',]
+    list_display = ('name', 'callsign', 'base', 'role', 'phone', 'email', 'command_weighting', 'last_updated_timestamp',)
+    search_fields = ['name', 'callsign',]
 
 class MessageAdmin(SimpleHistoryAdmin):
     list_display = ('id', 'sender', 'recipient', 'reported_location', 'message_entry_timestamp', 'last_updated_user', 'last_updated_timestamp', 'message_info',)
