@@ -1,0 +1,18 @@
+#!/bin/bash
+dir=${0%/*}
+. .env
+url=http://localhost:"$APP_PORT"/admin
+#echo "The docker containers will now start. Please open http://localhost:$APP_PORT/admin to use Float once this screen disappears."
+echo "Starting Docker containers"
+cd "$dir" && docker compose up -d
+printf "Waiting for server to start."
+while ! curl -s "$url"
+do
+  sleep 0.1
+  printf '.'
+done
+echo
+echo "Server running. Browse to http://localhost:$APP_PORT/admin to get started."
+sleep 15
+#echo "Starting web browser"
+#exec sensible-browser "$url"

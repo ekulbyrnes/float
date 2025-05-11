@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Start Float
+Comment=Start Float application server
+Exec=/srv/docker/float/start-float-server
+Icon=network-server
+Path=/srv/docker/float
+Terminal=true
+StartupNotify=true

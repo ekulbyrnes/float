@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Open Float
+Comment=Opens the Float web interface
+Exec=firefox http://localhost:8666/admin --fullscreen
+Icon=audio-input-microphone
+Path=~
+Terminal=false
+StartupNotify=false
