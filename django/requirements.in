@@ -6,3 +6,8 @@ django-bootstrap5
 gunicorn
 django-simple-history
 whitenoise
+django-extensions
+cbor2
+bidict
+uuid6
+pyzmq

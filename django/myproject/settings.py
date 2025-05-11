@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     # Include this to build on top of Boostrap 5
     'django_bootstrap5',
     'simple_history',
+    'django_extensions',
     'whitenoise',
     'float',
 ]

@@ -3,6 +3,8 @@ from django.db import models
 from simple_history.models import HistoricalRecords
 from django.utils import timezone
 
+import cbor2
+
 # Create your models here.
 
 class Role(models.Model):
@@ -77,6 +79,29 @@ class Message(models.Model):
 
     def __str__(self):
         return f'Message #{self.id}: {self.sender} -> {self.recipient} RE: {self.incident_ref}' # returns the {Message ID}: {Message Sender} -> {Message Recipient}, and Incident summary
+
+    def serialize(self):
+        message = {
+            "message_entry_timestamp": self.message_entry_timestamp,
+            "sender": self.sender.callsign,
+            "recipient": self.recipient.callsign,
+            "reported_location": self.reported_location,
+            "message_info": self.message_info,
+        }
+        return cbor2.dumps(message, datetime_as_timestamp=True, string_referencing=True)
+
+    @classmethod
+    def deserialize(cls, data):
+        message =  cbor2.loads(data)
+        new_message = Message(
+            message_entry_timestamp = message["message_entry_timestamp"],
+            sender = Operator.objects.get_or_create(callsign=message["sender"]),
+            recipient = Operator.objects.get_or_create(callsign=message["recipient"]),
+            reported_location = message["reported_location"],
+            message_info = message["message_info"],
+        )
+        new_message.save()
+        return new_message
 
 class IncidentPatient(models.Model):
     id = models.BigAutoField(primary_key=True)
