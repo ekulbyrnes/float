@@ -13,8 +13,8 @@ RUN apt-get update && \
     apt-get -y clean && \
     rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt .
-RUN pip install -r requirements.txt
+COPY requirements.in .
+RUN pip install -r requirements.in
 COPY . .
 EXPOSE 8000
 
