@@ -7,6 +7,29 @@ import cbor2
 
 # Create your models here.
 
+class Event(models.Model):
+    history = HistoricalRecords()
+    name = models.CharField(max_length=50, null=False, help_text='Event/Activity name')
+    description = models.CharField(max_length=2048, null=True, blank=True)
+    start_date = models.DateTimeField(null=True, blank=True)
+    end_date = models.DateTimeField(null=True, blank=True)
+    location = models.CharField(max_length=256, null=True, blank=True)
+
+    def __str__(self):
+        return self.name # Return event name
+
+class ApplicationInstance(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    history = HistoricalRecords()
+    name = models.CharField(max_length=50, null=False, help_text='Application Instance/Server ID')
+    description = models.CharField(max_length=2048, null=True, blank=True)
+    address = models.CharField(max_length=256, null=True, blank=True, help_text="Address/URL of cloud instance")
+    me = models.BooleanField(default=False, help_text='Is this us?')
+    sync = models.BooleanField(default=False, help_text='should we Sych with this upstream?')
+    # remote_auth_credentials
+
+    def __str__(self):
+        return self.name
 class Role(models.Model):
     id = models.BigAutoField(primary_key=True)
     history = HistoricalRecords()

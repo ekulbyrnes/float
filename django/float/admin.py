@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Role, Place, Operator, Message, IncidentPatient, Incident #, IncidentMessage,
+from .models import Event, ApplicationInstance, Role, Place, Operator, Message, IncidentPatient, Incident #, IncidentMessage,
 from simple_history.admin import SimpleHistoryAdmin
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
@@ -26,6 +26,16 @@ def download_csv(modeladmin, request, queryset):
 admin.site.add_action(download_csv)
 
 # Create your admin models here.
+class EventAdmin(SimpleHistoryAdmin):
+    list_display = ('name',
+                    'start_date',
+                    'end_date',)
+
+class ApplicationInstanceAdmin(SimpleHistoryAdmin):
+    list_display = ('name',
+                    'description',
+                    'address',
+                    'sync',)
 
 class RoleAdmin(SimpleHistoryAdmin):
     list_display = ('title',)
@@ -66,6 +76,8 @@ class IncidentAdmin(SimpleHistoryAdmin):
 
 # Register your models here.
 
+admin.site.register(Event, EventAdmin)
+admin.site.register(ApplicationInstance, ApplicationInstanceAdmin)
 admin.site.register(Role, RoleAdmin)
 admin.site.register(Place, PlaceAdmin)
 admin.site.register(Operator, OperatorAdmin)
